@@ -77,7 +77,7 @@ def hz2midi(hz):
     return midi
 
 
-def audio_to_midi_melodia(infile, outfile):
+def audio_to_midi_melodia(infile, outfile, bpm):
 
     # define analysis parameters
     fs = 44100
@@ -110,7 +110,7 @@ def audio_to_midi_melodia(infile, outfile):
 
     # save note sequence to a midi file
     print("Saving MIDI to disk...")
-    save_midi(outfile, notes, 60)
+    save_midi(outfile, notes, bpm)
 
     print("Conversion complete.")
 
@@ -119,10 +119,11 @@ def audio_to_midi_melodia(infile, outfile):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("infile")
-    parser.add_argument("outfile")
+    parser.add_argument("infile", help="Path to input audio file.")
+    parser.add_argument("outfile", help="Path for saving output MIDI file.")
+    parser.add_argument("bpm", type=int, help="Tempo of the track in BPM.")
 
     args = parser.parse_args()
 
-    audio_to_midi_melodia(args.infile, args.outfile)
+    audio_to_midi_melodia(args.infile, args.outfile, args.bpm)
 
