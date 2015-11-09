@@ -3,11 +3,11 @@ Extract the melody from an audio file and export to MIDI
 
 # Usage
 ```bash
->python audio_to_midi_melodia.py <inputfile.wav> <outputfile.mid> <bpm>
+>python audio_to_midi_melodia.py infile outfile bpm [--smooth SMOOTH] [--minduration MINDURATION]
 ```
 For example:
 ```bash
->python audio_to_midi_melodia.py ~/song.wav ~/song.mid 60
+>python audio_to_midi_melodia.py ~/song.wav ~/song.mid 60 --smooth 0.25 --minduration 0.1
 ```
 
 # Dependencies
