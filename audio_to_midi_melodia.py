@@ -4,6 +4,8 @@ import librosa, vamp
 import argparse
 import numpy as np
 from midiutil.MidiFile import MIDIFile
+from scipy.signal import medfilt
+
 
 def save_midi(outfile, notes, tempo):
 
@@ -31,13 +33,24 @@ def save_midi(outfile, notes, tempo):
     binfile.close()
 
 
-def midi_to_notes(midi, fs, hop):
+def midi_to_notes(midi, fs, hop, smooth, minduration):
+
+    # smooth midi pitch sequence first
+    if (smooth > 0):
+        filter_duration = smooth # in seconds
+        filter_size = int(filter_duration * fs / float(hop))
+        if filter_size % 2 == 0:
+            filter_size += 1
+        midi_filt = medfilt(midi, filter_size)
+    else:
+        midi_filt = midi
+    # print(len(midi),len(midi_filt))
 
     notes = []
     p_prev = None
     duration = 0
     onset = 0
-    for n, p in enumerate(midi):
+    for n, p in enumerate(midi_filt):
         if p==p_prev:
             duration += 1
         else:
@@ -45,8 +58,10 @@ def midi_to_notes(midi, fs, hop):
             if p_prev > 0:
                 # add note
                 duration_sec = duration * hop / float(fs)
-                onset_sec = onset * hop / float(fs)
-                notes.append((onset_sec, duration_sec, p_prev))
+                # only add notes that are long enough
+                if duration_sec >= minduration:
+                    onset_sec = onset * hop / float(fs)
+                    notes.append((onset_sec, duration_sec, p_prev))
 
             # start new note
             onset = n
@@ -77,7 +92,7 @@ def hz2midi(hz):
     return midi
 
 
-def audio_to_midi_melodia(infile, outfile, bpm):
+def audio_to_midi_melodia(infile, outfile, bpm, smooth, minduration):
 
     # define analysis parameters
     fs = 44100
@@ -106,7 +121,7 @@ def audio_to_midi_melodia(infile, outfile, bpm):
     midi_pitch = hz2midi(pitch)
 
     # segment sequence into individual midi notes
-    notes = midi_to_notes(midi_pitch, fs, hop)
+    notes = midi_to_notes(midi_pitch, fs, hop, smooth, minduration)
 
     # save note sequence to a midi file
     print("Saving MIDI to disk...")
@@ -122,8 +137,10 @@ if __name__ == "__main__":
     parser.add_argument("infile", help="Path to input audio file.")
     parser.add_argument("outfile", help="Path for saving output MIDI file.")
     parser.add_argument("bpm", type=int, help="Tempo of the track in BPM.")
+    parser.add_argument("--smooth", type=float, default=0, help="Smooth the pitch sequence with a median filter of the provided duration (in seconds).")
+    parser.add_argument("--minduration", type=float, default=0.1, help="Minimum allowed duration for note (in seconds). Shorter notes will be removed.")
 
     args = parser.parse_args()
 
-    audio_to_midi_melodia(args.infile, args.outfile, args.bpm)
+    audio_to_midi_melodia(args.infile, args.outfile, args.bpm, args.smooth, args.minduration)
 
