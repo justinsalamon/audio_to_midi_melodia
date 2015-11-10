@@ -5,6 +5,30 @@ import argparse
 import numpy as np
 from midiutil.MidiFile import MIDIFile
 from scipy.signal import medfilt
+import jams
+
+
+def save_jams(jamsfile, notes, track_duration):
+
+    # Construct a new JAMS object and annotation records
+    jam = jams.JAMS()
+
+    # Store the track duration
+    jam.file_metadata.duration = track_duration
+
+    midi_an = jams.Annotation(namespace='pitch_midi')
+    midi_an.annotation_metadata = jams.AnnotationMetadata(data_source='audio_to_midi_melodia script')
+
+    # Add midi notes to the annotation record.
+    for n in notes:
+        midi_an.append(time=n[0], duration=n[1], value=n[2])
+
+    # Store the new annotation in the jam
+    jam.annotations.append(midi_an)
+
+    # Save to disk
+    jam.save(jamsfile)
+
 
 
 def save_midi(outfile, notes, tempo):
@@ -92,7 +116,7 @@ def hz2midi(hz):
     return midi
 
 
-def audio_to_midi_melodia(infile, outfile, bpm, smooth, minduration):
+def audio_to_midi_melodia(infile, outfile, bpm, smooth=0.25, minduration=0.1, savejams=False):
 
     # define analysis parameters
     fs = 44100
@@ -127,6 +151,12 @@ def audio_to_midi_melodia(infile, outfile, bpm, smooth, minduration):
     print("Saving MIDI to disk...")
     save_midi(outfile, notes, bpm)
 
+    if savejams:
+        print("Saving JAMS to disk...")
+        jamsfile = outfile.replace(".mid", ".jams")
+        track_duration = data / float(fs)
+        save_jams(jamsfile, notes, track_duration)
+
     print("Conversion complete.")
 
 
@@ -139,8 +169,9 @@ if __name__ == "__main__":
     parser.add_argument("bpm", type=int, help="Tempo of the track in BPM.")
     parser.add_argument("--smooth", type=float, default=0, help="Smooth the pitch sequence with a median filter of the provided duration (in seconds).")
     parser.add_argument("--minduration", type=float, default=0.1, help="Minimum allowed duration for note (in seconds). Shorter notes will be removed.")
+    parser.add_argument("--jams", action="store_const", const=True, default=False, help="Also save output in JAMS format.")
 
     args = parser.parse_args()
 
-    audio_to_midi_melodia(args.infile, args.outfile, args.bpm, args.smooth, args.minduration)
+    audio_to_midi_melodia(args.infile, args.outfile, args.bpm, smooth=args.smooth, minduration=args.minduration, savejams=args.jams)
 
