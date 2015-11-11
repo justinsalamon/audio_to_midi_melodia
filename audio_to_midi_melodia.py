@@ -1,23 +1,29 @@
 # CREATED: 11/9/15 3:57 PM by Justin Salamon <justin.salamon@nyu.edu>
 
 import librosa, vamp
-import argparse
+import argparse, os
 import numpy as np
 from midiutil.MidiFile import MIDIFile
 from scipy.signal import medfilt
 import jams
 
 
-def save_jams(jamsfile, notes, track_duration):
+def save_jams(jamsfile, notes, track_duration, orig_filename):
 
     # Construct a new JAMS object and annotation records
     jam = jams.JAMS()
 
     # Store the track duration
     jam.file_metadata.duration = track_duration
+    jam.file_metadata.title = orig_filename
 
-    midi_an = jams.Annotation(namespace='pitch_midi')
-    midi_an.annotation_metadata = jams.AnnotationMetadata(data_source='audio_to_midi_melodia script')
+    midi_an = jams.Annotation(namespace='pitch_midi',
+                              duration=track_duration)
+    midi_an.annotation_metadata = \
+        jams.AnnotationMetadata(
+            data_source='audio_to_midi_melodia script',
+            annotation_tools='audio_to_midi_melodia.py (https://github.com/'
+                             'justinsalamon/audio_to_midi_melodia)')
 
     # Add midi notes to the annotation record.
     for n in notes:
@@ -25,6 +31,11 @@ def save_jams(jamsfile, notes, track_duration):
 
     # Store the new annotation in the jam
     jam.annotations.append(midi_an)
+
+    # debug
+    # print midi_an.data
+    # print pd.__version__
+    # print mir_eval.__file__
 
     # Save to disk
     jam.save(jamsfile)
@@ -154,8 +165,8 @@ def audio_to_midi_melodia(infile, outfile, bpm, smooth=0.25, minduration=0.1, sa
     if savejams:
         print("Saving JAMS to disk...")
         jamsfile = outfile.replace(".mid", ".jams")
-        track_duration = data / float(fs)
-        save_jams(jamsfile, notes, track_duration)
+        track_duration = len(data) / float(fs)
+        save_jams(jamsfile, notes, track_duration, os.path.basename(infile))
 
     print("Conversion complete.")
 
