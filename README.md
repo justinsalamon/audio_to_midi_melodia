@@ -7,11 +7,15 @@ Note: Melodia can work pretty well and is the result of several years of researc
 
 # Usage
 ```bash
->python audio_to_midi_melodia.py infile outfile bpm [--smooth SMOOTH] [--minduration MINDURATION]
+>python audio_to_midi_melodia.py infile outfile bpm [--smooth SMOOTH] [--minduration MINDURATION] [--jams]
 ```
 For example:
 ```bash
->python audio_to_midi_melodia.py ~/song.wav ~/song.mid 60 --smooth 0.25 --minduration 0.1
+>python audio_to_midi_melodia.py ~/song.wav ~/song.mid 60 --smooth 0.25 --minduration 0.1 --jams
+```
+For further help use:
+```bash
+>python audio_to_midi_melodia.py --help
 ```
 
 # Dependencies
@@ -20,3 +24,4 @@ For example:
 - Vamp python module: https://pypi.python.org/pypi/vamp
 - midiutil: https://code.google.com/p/midiutil/
 - NumPy & SciPy: http://www.scipy.org/
+- JAMS: https://github.com/marl/jams
