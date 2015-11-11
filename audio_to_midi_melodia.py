@@ -136,7 +136,7 @@ def audio_to_midi_melodia(infile, outfile, bpm, smooth=0.25, minduration=0.1, sa
 
     # load audio using librosa
     print("Loading audio...")
-    data, sr = librosa.load('/Users/justin/datasets/melody/mirex05/audio/train05.wav', sr=fs, mono=True)
+    data, sr = librosa.load(infile, sr=fs, mono=True)
 
     # extract melody using melodia vamp plugin
     print("Extracting melody f0 with MELODIA...")
