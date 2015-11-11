@@ -6,6 +6,7 @@ import numpy as np
 from midiutil.MidiFile import MIDIFile
 from scipy.signal import medfilt
 import jams
+import __init__
 
 
 def save_jams(jamsfile, notes, track_duration, orig_filename):
@@ -21,7 +22,7 @@ def save_jams(jamsfile, notes, track_duration, orig_filename):
                               duration=track_duration)
     midi_an.annotation_metadata = \
         jams.AnnotationMetadata(
-            data_source='audio_to_midi_melodia script',
+            data_source='audio_to_midi_melodia.py v%s' % __init__.__version__,
             annotation_tools='audio_to_midi_melodia.py (https://github.com/'
                              'justinsalamon/audio_to_midi_melodia)')
 
