@@ -9,5 +9,6 @@ train05.mid
 .idea/vcs.xml
 .idea/workspace.xml
 .idea/scopes/scope_settings.xml
+.idea/*
 __init__.pyc
 audio_to_midi_melodia.pyc
