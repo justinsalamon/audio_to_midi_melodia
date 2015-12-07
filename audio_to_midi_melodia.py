@@ -8,6 +8,27 @@ from scipy.signal import medfilt
 import jams
 import __init__
 
+'''
+Extract the melody from an audio file and convert it to MIDI.
+
+The script extracts the melody from an audio file using the Melodia algorithm,
+and then segments the continuous pitch sequence into a series of quantized
+notes, and exports to MIDI (using the provided BPM).
+
+Note: Melodia can work pretty well and is the result of several years of
+research. The note segmentation/quantization code was hacked in about 30
+minutes. Proceed at your own risk... :)
+
+usage: audio_to_midi_melodia.py [-h] [--smooth SMOOTH]
+                                [--minduration MINDURATION] [--jams]
+                                infile outfile bpm
+
+
+Examples:
+python audio_to_midi_melodia.py --smooth 0.25 --minduration 0.1 --jams
+                                ~/song.wav ~/song.mid 60
+'''
+
 
 def save_jams(jamsfile, notes, track_duration, orig_filename):
 
@@ -28,7 +49,7 @@ def save_jams(jamsfile, notes, track_duration, orig_filename):
 
     # Add midi notes to the annotation record.
     for n in notes:
-        midi_an.append(time=n[0], duration=n[1], value=n[2])
+        midi_an.append(time=n[0], duration=n[1], value=n[2], confidence=0)
 
     # Store the new annotation in the jam
     jam.annotations.append(midi_an)
