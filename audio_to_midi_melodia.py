@@ -1,7 +1,9 @@
 # CREATED: 11/9/15 3:57 PM by Justin Salamon <justin.salamon@nyu.edu>
 
-import librosa, vamp
-import argparse, os
+import librosa
+import vamp
+import argparse
+import os
 import numpy as np
 from midiutil.MidiFile import MIDIFile
 from scipy.signal import medfilt
@@ -13,7 +15,10 @@ Extract the melody from an audio file and convert it to MIDI.
 
 The script extracts the melody from an audio file using the Melodia algorithm,
 and then segments the continuous pitch sequence into a series of quantized
-notes, and exports to MIDI (using the provided BPM).
+notes, and exports to MIDI using the provided BPM. If the --jams option is
+specified the script will also save the output as a JAMS file. Note that the
+JAMS file uses the original note onset/offset times estimated by the algorithm
+and ignores the provided BPM value.
 
 Note: Melodia can work pretty well and is the result of several years of
 research. The note segmentation/quantization code was hacked in about 30
@@ -54,25 +59,19 @@ def save_jams(jamsfile, notes, track_duration, orig_filename):
     # Store the new annotation in the jam
     jam.annotations.append(midi_an)
 
-    # debug
-    # print midi_an.data
-    # print pd.__version__
-    # print mir_eval.__file__
-
     # Save to disk
     jam.save(jamsfile)
-
 
 
 def save_midi(outfile, notes, tempo):
 
     track = 0
     time = 0
-    MIDI = MIDIFile(1)
+    midifile = MIDIFile(1)
 
     # Add track name and tempo.
-    MIDI.addTrackName(track, time, "MIDI TRACK")
-    MIDI.addTempo(track, time, tempo)
+    midifile.addTrackName(track, time, "MIDI TRACK")
+    midifile.addTempo(track, time, tempo)
 
     channel = 0
     volume = 100
@@ -82,11 +81,11 @@ def save_midi(outfile, notes, tempo):
         duration = note[1] * (tempo/60.)
         # duration = 1
         pitch = note[2]
-        MIDI.addNote(track, channel, pitch, onset, duration, volume)
+        midifile.addNote(track, channel, pitch, onset, duration, volume)
 
     # And write it to disk.
     binfile = open(outfile, 'wb')
-    MIDI.writeFile(binfile)
+    midifile.writeFile(binfile)
     binfile.close()
 
 
@@ -94,7 +93,7 @@ def midi_to_notes(midi, fs, hop, smooth, minduration):
 
     # smooth midi pitch sequence first
     if (smooth > 0):
-        filter_duration = smooth # in seconds
+        filter_duration = smooth  # in seconds
         filter_size = int(filter_duration * fs / float(hop))
         if filter_size % 2 == 0:
             filter_size += 1
@@ -108,7 +107,7 @@ def midi_to_notes(midi, fs, hop, smooth, minduration):
     duration = 0
     onset = 0
     for n, p in enumerate(midi_filt):
-        if p==p_prev:
+        if p == p_prev:
             duration += 1
         else:
             # treat 0 as silence
@@ -139,9 +138,9 @@ def hz2midi(hz):
 
     # convert from Hz to midi note
     hz_nonneg = hz.copy()
-    hz_nonneg[hz<=0] = 0
+    hz_nonneg[hz <= 0] = 0
     midi = 69 + 12*np.log2(hz_nonneg/440.)
-    midi[midi<=0] = 0
+    midi[midi <= 0] = 0
 
     # round
     midi = np.round(midi)
@@ -149,7 +148,8 @@ def hz2midi(hz):
     return midi
 
 
-def audio_to_midi_melodia(infile, outfile, bpm, smooth=0.25, minduration=0.1, savejams=False):
+def audio_to_midi_melodia(infile, outfile, bpm, smooth=0.25, minduration=0.1,
+                          savejams=False):
 
     # define analysis parameters
     fs = 44100
@@ -161,7 +161,8 @@ def audio_to_midi_melodia(infile, outfile, bpm, smooth=0.25, minduration=0.1, sa
 
     # extract melody using melodia vamp plugin
     print("Extracting melody f0 with MELODIA...")
-    melody = vamp.collect(data, sr, "mtg-melodia:melodia", parameters={"voicing": 0.2})
+    melody = vamp.collect(data, sr, "mtg-melodia:melodia",
+                          parameters={"voicing": 0.2})
 
     # hop = melody['vector'][0]
     pitch = melody['vector'][1]
@@ -193,18 +194,23 @@ def audio_to_midi_melodia(infile, outfile, bpm, smooth=0.25, minduration=0.1, sa
     print("Conversion complete.")
 
 
-
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument("infile", help="Path to input audio file.")
     parser.add_argument("outfile", help="Path for saving output MIDI file.")
     parser.add_argument("bpm", type=int, help="Tempo of the track in BPM.")
-    parser.add_argument("--smooth", type=float, default=0, help="Smooth the pitch sequence with a median filter of the provided duration (in seconds).")
-    parser.add_argument("--minduration", type=float, default=0.1, help="Minimum allowed duration for note (in seconds). Shorter notes will be removed.")
-    parser.add_argument("--jams", action="store_const", const=True, default=False, help="Also save output in JAMS format.")
+    parser.add_argument("--smooth", type=float, default=0.25,
+                        help="Smooth the pitch sequence with a median filter "
+                             "of the provided duration (in seconds).")
+    parser.add_argument("--minduration", type=float, default=0.1,
+                        help="Minimum allowed duration for note (in seconds). "
+                             "Shorter notes will be removed.")
+    parser.add_argument("--jams", action="store_const", const=True,
+                        default=False, help="Also save output in JAMS format.")
 
     args = parser.parse_args()
 
-    audio_to_midi_melodia(args.infile, args.outfile, args.bpm, smooth=args.smooth, minduration=args.minduration, savejams=args.jams)
-
+    audio_to_midi_melodia(args.infile, args.outfile, args.bpm,
+                          smooth=args.smooth, minduration=args.minduration,
+                          savejams=args.jams)
