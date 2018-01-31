@@ -3,7 +3,7 @@ Extract the melody notes from an audio file and export them to MIDI and (optiona
 
 The script extracts the melody from an audio file using the [Melodia](http://mtg.upf.edu/technologies/melodia) algorithm, and then segments the continuous pitch sequence into a series of quantized notes, and exports to MIDI using the provided BPM. If the `--jams` option is specified the script will also save the output as a JAMS file. Note that the JAMS file uses the original note onset/offset times estimated by the algorithm and ignores the provided BPM value.
 
-Note: Melodia can work pretty well and is the result of [several years of research](www.justinsalamon.com/publications). The note segmentation/quantization code was written to be as simple as possible and will most likely not provide results that are as good as those provided by state-of-the-art note segmentation/quantization algorithms.
+Note: Melodia can work pretty well and is the result of [several years of research](http://www.justinsalamon.com/publications). The note segmentation/quantization code was written to be as simple as possible and will most likely not provide results that are as good as those provided by state-of-the-art note segmentation/quantization algorithms.
 
 # Usage
 ```bash
