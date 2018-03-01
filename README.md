@@ -20,7 +20,7 @@ For further help use:
 
 # Dependencies
 - Melodia melody extraction Vamp plugin: http://mtg.upf.edu/technologies/melodia
-- Librosa: https://bmcfee.github.io/librosa/
+- Librosa: https://github.com/librosa/librosa
 - Vamp python module: https://pypi.python.org/pypi/vamp
 - midiutil: https://code.google.com/p/midiutil/
 - NumPy & SciPy: http://www.scipy.org/
