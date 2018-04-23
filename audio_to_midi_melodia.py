@@ -138,9 +138,10 @@ def hz2midi(hz):
 
     # convert from Hz to midi note
     hz_nonneg = hz.copy()
-    hz_nonneg[hz <= 0] = 0
+    idx = hz_nonneg <= 0
+    hz_nonneg[idx] = 1
     midi = 69 + 12*np.log2(hz_nonneg/440.)
-    midi[midi <= 0] = 0
+    midi[idx] = 0
 
     # round
     midi = np.round(midi)
