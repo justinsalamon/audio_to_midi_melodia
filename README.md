@@ -19,6 +19,7 @@ For further help use:
 ```
 
 # Dependencies
+- Requires python 2.7 (will most likely crash on python 3, untested)
 - Melodia melody extraction Vamp plugin: http://mtg.upf.edu/technologies/melodia
 - Librosa: https://github.com/librosa/librosa
 - Vamp python module: https://pypi.python.org/pypi/vamp
