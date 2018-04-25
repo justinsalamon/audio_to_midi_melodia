@@ -26,3 +26,11 @@ For further help use:
 - midiutil: https://code.google.com/p/midiutil/
 - NumPy & SciPy: http://www.scipy.org/
 - JAMS: https://github.com/marl/jams
+
+Known to work with the following module versions on python 2.7:
+- Librosa 0.5.1
+- midiutil 1.2.1
+- vamp 1.1.0
+- jams 0.3.1
+- numpy 1.13.1
+- scipy 0.19.1
