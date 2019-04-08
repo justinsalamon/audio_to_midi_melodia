@@ -1,6 +1,7 @@
 # CREATED: 11/9/15 3:57 PM by Justin Salamon <justin.salamon@nyu.edu>
 
-import librosa
+import soundfile
+import resampy
 import vamp
 import argparse
 import os
@@ -158,7 +159,14 @@ def audio_to_midi_melodia(infile, outfile, bpm, smooth=0.25, minduration=0.1,
 
     # load audio using librosa
     print("Loading audio...")
-    data, sr = librosa.load(infile, sr=fs, mono=True)
+    data, sr = soundfile.read(infile)
+    # mixdown to mono if needed
+    if len(data.shape) > 1 and data.shape[1] > 1:
+        data = data.mean(axis=1)
+    # resample to 44100 if needed
+    if sr != fs:
+        data = resampy.resample(data, sr, fs)
+        sr = fs
 
     # extract melody using melodia vamp plugin
     print("Extracting melody f0 with MELODIA...")
