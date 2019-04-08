@@ -13,24 +13,47 @@ For example:
 ```bash
 >python audio_to_midi_melodia.py ~/song.wav ~/song.mid 60 --smooth 0.25 --minduration 0.1 --jams
 ```
-For further help use:
-```bash
->python audio_to_midi_melodia.py --help
+Details:
+```
+usage: audio_to_midi_melodia.py [-h] [--smooth SMOOTH]
+                                [--minduration MINDURATION] [--jams]
+                                infile outfile bpm
+
+positional arguments:
+  infile                Path to input audio file.
+  outfile               Path for saving output MIDI file.
+  bpm                   Tempo of the track in BPM.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --smooth SMOOTH       Smooth the pitch sequence with a median filter of the
+                        provided duration (in seconds).
+  --minduration MINDURATION
+                        Minimum allowed duration for note (in seconds).
+                        Shorter notes will be removed.
+  --jams                Also save output in JAMS format.
 ```
 
-# Dependencies
-- Requires python 2.7 (will most likely crash on python 3, untested)
+# Installation
+### Non-python dependencies
 - Melodia melody extraction Vamp plugin: http://mtg.upf.edu/technologies/melodia
-- Librosa: https://github.com/librosa/librosa
-- Vamp python module: https://pypi.python.org/pypi/vamp
-- midiutil: https://code.google.com/p/midiutil/
-- NumPy & SciPy: http://www.scipy.org/
-- JAMS: https://github.com/marl/jams
+### Python dependencies
+This program requires Python 2.7 (it has not been tested on Python 3 and will most likely crash).
+
+All python dependencies (listed below) can be installed by calling `pip install -r requirements.txt`.
+- soundfile: https://pypi.org/project/SoundFile/
+- resampy: https://pypi.org/project/resampy/
+- vamp: https://pypi.python.org/pypi/vamp
+- midiutil: https://pypi.org/project/MIDIUtil/
+- jams: https://pypi.org/project/jams/
+- numpy: https://pypi.org/project/numpy/
+- scipy: https://pypi.org/project/scipy/
 
 Known to work with the following module versions on python 2.7:
-- Librosa 0.5.1
-- midiutil 1.2.1
-- vamp 1.1.0
-- jams 0.3.1
-- numpy 1.13.1
-- scipy 0.19.1
+- SoundFile==0.10.2
+- resampy==0.2.1
+- vamp==1.1.0
+- MIDIUtil==1.2.1
+- jams==0.3.3
+- numpy==1.16.2
+- scipy==1.2.1
