@@ -57,3 +57,13 @@ Known to work with the following module versions on python 2.7:
 - jams==0.3.3
 - numpy==1.16.2
 - scipy==1.2.1
+
+# How to contribute
+If you would like to contribute a feature and/or bugfix to this repository, please follow the following steps:
+1. Create an issue describing the bug/feature
+2. I will reply on the issue thread to determine whether the feature can/should be added
+3. Discuss implementation details in the issue thread and reach consensus
+4. Once consensus is reached re: implementation, start a pull request
+5. Request code review once the pull requets is ready for review
+6. Fix requested changes to the pull request (if any)
+7. Pull request will then be merged
