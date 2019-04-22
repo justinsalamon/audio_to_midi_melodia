@@ -196,7 +196,7 @@ def audio_to_midi_melodia(infile, outfile, bpm, smooth=0.25, minduration=0.1,
 
     if savejams:
         print("Saving JAMS to disk...")
-        jamsfile = outfile.replace(".mid", ".jams")
+        jamsfile = os.path.splitext(outfile)[0] + ".jams"
         track_duration = len(data) / float(fs)
         save_jams(jamsfile, notes, track_duration, os.path.basename(infile))
 
