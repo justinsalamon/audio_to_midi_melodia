@@ -67,3 +67,5 @@ If you would like to contribute a feature and/or bugfix to this repository, plea
 5. Request code review once the pull requets is ready for review
 6. Fix requested changes to the pull request (if any)
 7. Pull request will then be merged
+
+IMPORTANT: please be sure to always discuss a proposed feature/fix in an issue *before* creating a pull request.
