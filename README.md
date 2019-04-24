@@ -66,8 +66,8 @@ Known to work with the following module versions on python 2.7:
 If you would like to contribute a feature and/or bugfix to this repository, please follow the following steps:
 1. Create an issue describing the bug/feature
 2. I will reply on the issue thread to determine whether the feature can/should be added
-3. Discuss implementation details in the issue thread and reach consensus
-4. Once consensus is reached re: implementation, start a pull request
+3. Discuss design/implementation details in the issue thread and reach consensus
+4. Once consensus is reached re: design/implementation, start a pull request
 5. Request code review once the pull requets is ready for review
 6. Fix requested changes to the pull request (if any)
 7. Pull request will then be merged
