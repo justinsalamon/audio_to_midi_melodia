@@ -42,7 +42,9 @@ optional arguments:
 ### Non-python dependencies
 - Melodia melody extraction Vamp plugin: http://mtg.upf.edu/technologies/melodia
 ### Python dependencies
-This program requires Python 2.7 (it has not been tested on Python 3 and will most likely crash).
+This program requires Python 2.7 (it has not been tested on Python 3 and might crash).
+
+Windows users should use a 32-bit Python installation, even if their OS is 64 bit, otherwise you might get the following error: `TypeError: Failed to load plugin: mtg-melodia:melodia`.
 
 All python dependencies (listed below) can be installed by calling `pip install -r requirements.txt`.
 - soundfile: https://pypi.org/project/SoundFile/
