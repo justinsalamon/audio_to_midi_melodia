@@ -43,6 +43,7 @@ optional arguments:
 
 ### Non-python dependencies
 - Melodia melody extraction Vamp plugin: http://mtg.upf.edu/technologies/melodia
+- Please read and follow the installation instructions in Melodia's README file.
 ### Python dependencies
 This program requires Python 2.7 (it has not been tested on Python 3 and might crash).
 
