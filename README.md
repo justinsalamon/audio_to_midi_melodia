@@ -39,6 +39,8 @@ optional arguments:
 ```
 
 # Installation
+**Windows users:** if you run into any installation issues please [read and try the solutions on this thread](https://github.com/justinsalamon/audio_to_midi_melodia/issues/4) before posting an issue, thanks!
+
 ### Non-python dependencies
 - Melodia melody extraction Vamp plugin: http://mtg.upf.edu/technologies/melodia
 ### Python dependencies
