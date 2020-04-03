@@ -7,7 +7,9 @@ Note: extracting a MIDI melody from a polyphonic audio file involves two main st
 1. melody extraction 
 2. note segmentation. 
 
-Melody extraction is the task of estimating the continuous fundamental frequency (f0) of the melody from a polyphonic audio recording. This is achieved using the Melodia melody extraction algorithm, which is the result of [several years of research](http://www.justinsalamon.com/phd-thesis.html). Note segmentation is the task of converting the continuous f0 curve estimated by Melodia (which can contain e.g. glissando and vibrato) into a sequence of quantized notes each with a start time, end time, and fixed pitch value. Unlike Melodia, the note segmentation code used here was written during a single-day hackathon and designed to be as simple as possible. It will most likely not provide results that are as good as those provided by state-of-the-art note segmentation/quantization algorithms.
+**Melody extraction** is the task of estimating the continuous fundamental frequency (f0) of the melody from a polyphonic audio recording. This is achieved using the Melodia melody extraction algorithm, which is the result of [several years of research](http://www.justinsalamon.com/phd-thesis.html). 
+
+**Note segmentation** is the task of converting the continuous f0 curve estimated by Melodia (which can contain e.g. glissando and vibrato) into a sequence of quantized notes each with a start time, end time, and fixed pitch value. **Unlike Melodia, the note segmentation code used here was written during a single-day hackathon** and designed to be as simple as possible. Peformance will vary depending on musical content, and it will most likely not provide results that are as good as those provided by state-of-the-art note segmentation/quantization algorithms.
 
 # Usage
 ```bash
